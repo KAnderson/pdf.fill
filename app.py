@@ -453,19 +453,20 @@ def generate_template_api(file_id):
     if section:
         fields = [f for f in fields if f['name'].startswith(section)]
 
-    # Create template
-    template = {}
+    # Create template as ordered list to preserve field order
+    template_list = []
     for field in fields:
-        template[field['name']] = {
+        template_list.append({
+            'name': field['name'],
             'value': '' if field['type'] != 'checkbox' else 'Off',
             'type': field['type'],
             'description': field['tooltip']
-        }
+        })
 
     return jsonify({
         'success': True,
-        'template': template,
-        'count': len(template)
+        'template': template_list,
+        'count': len(template_list)
     })
 
 

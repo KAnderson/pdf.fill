@@ -222,14 +222,14 @@ async function generateTemplate() {
         if (data.success) {
             // Build JSON with descriptions as inline comments
             let jsonLines = ['{\n'];
-            const entries = Object.entries(data.template);
+            const fields = data.template;
 
-            entries.forEach(([key, value], index) => {
-                const isLast = index === entries.length - 1;
-                const description = value.description ? ` // ${value.description}` : '';
-                const fieldValue = JSON.stringify(value.value);
+            fields.forEach((field, index) => {
+                const isLast = index === fields.length - 1;
+                const description = field.description ? ` // ${field.description}` : '';
+                const fieldValue = JSON.stringify(field.value);
 
-                jsonLines.push(`  "${key}": ${fieldValue}${isLast ? '' : ','}${description}\n`);
+                jsonLines.push(`  "${field.name}": ${fieldValue}${isLast ? '' : ','}${description}\n`);
             });
 
             jsonLines.push('}');
@@ -411,14 +411,14 @@ async function exportTemplate() {
         if (data.success) {
             // Build JSON with descriptions as inline comments
             let jsonLines = ['{\n'];
-            const entries = Object.entries(data.template);
+            const fields = data.template;
 
-            entries.forEach(([key, value], index) => {
-                const isLast = index === entries.length - 1;
-                const description = value.description ? ` // ${value.description}` : '';
-                const fieldValue = JSON.stringify(value.value);
+            fields.forEach((field, index) => {
+                const isLast = index === fields.length - 1;
+                const description = field.description ? ` // ${field.description}` : '';
+                const fieldValue = JSON.stringify(field.value);
 
-                jsonLines.push(`  "${key}": ${fieldValue}${isLast ? '' : ','}${description}\n`);
+                jsonLines.push(`  "${field.name}": ${fieldValue}${isLast ? '' : ','}${description}\n`);
             });
 
             jsonLines.push('}');
