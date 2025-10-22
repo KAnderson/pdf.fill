@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Form Filler - Easy UI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 PDF Form Filler</h1>
+            <p>Upload, explore, and fill PDF forms with ease</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="card" id="upload-section">
+            <h2>1. Upload PDF</h2>
+            <div class="upload-area" id="upload-area">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Click to upload or drag and drop</p>
+                <p class="small">PDF files only, max 16MB</p>
+                <input type="file" id="pdf-upload" accept=".pdf" hidden>
+            </div>
+            <div id="upload-status" class="status hidden"></div>
+        </section>
+
+        <!-- Tools Section -->
+        <div id="tools-section" class="hidden">
+            <!-- Field Explorer -->
+            <section class="card">
+                <h2>2. Explore Fields</h2>
+                <div class="tabs">
+                    <button class="tab active" data-tab="list">📋 All Fields</button>
+                    <button class="tab" data-tab="search">🔍 Search</button>
+                    <button class="tab" data-tab="template">📝 Template</button>
+                </div>
+
+                <!-- All Fields Tab -->
+                <div id="list-tab" class="tab-content active">
+                    <div class="field-stats" id="field-stats"></div>
+                    <div class="field-filter">
+                        <input type="text" id="field-filter" placeholder="Filter fields by name...">
+                        <select id="section-filter">
+                            <option value="">All Sections</option>
+                            <option value="A">Section A</option>
+                            <option value="B">Section B</option>
+                            <option value="C">Section C</option>
+                            <option value="D">Section D</option>
+                        </select>
+                    </div>
+                    <div id="field-list" class="field-list"></div>
+                </div>
+
+                <!-- Search Tab -->
+                <div id="search-tab" class="tab-content">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="Search by label (e.g., 'last name', 'address', 'phone')">
+                        <button id="search-btn" class="btn btn-primary">Search</button>
+                    </div>
+                    <div id="search-results"></div>
+                </div>
+
+                <!-- Template Tab -->
+                <div id="template-tab" class="tab-content">
+                    <div class="template-options">
+                        <label>
+                            <input type="radio" name="template-section" value="" checked> All Fields
+                        </label>
+                        <label>
+                            <input type="radio" name="template-section" value="A"> Section A Only
+                        </label>
+                        <label>
+                            <input type="radio" name="template-section" value="B"> Section B Only
+                        </label>
+                        <button id="generate-template-btn" class="btn btn-primary">Generate Template</button>
+                    </div>
+                    <div id="template-output"></div>
+                </div>
+            </section>
+
+            <!-- Fill PDF Section -->
+            <section class="card">
+                <h2>3. Fill PDF</h2>
+                <div class="fill-options">
+                    <button class="btn btn-secondary" id="add-field-btn">+ Add Field</button>
+                    <button class="btn btn-secondary" id="load-json-btn">📁 Load JSON</button>
+                    <button class="btn btn-secondary" id="clear-fields-btn">🗑️ Clear All</button>
+                </div>
+                <div id="fill-form"></div>
+                <button id="fill-pdf-btn" class="btn btn-primary btn-large" disabled>Fill PDF</button>
+                <input type="file" id="json-upload" accept=".json" hidden>
+            </section>
+
+            <!-- Utilities Section -->
+            <section class="card">
+                <h2>4. Utilities</h2>
+                <div class="utility-grid">
+                    <div class="utility-card">
+                        <h3>🚫 Remove VOID Watermark</h3>
+                        <p>Permanently remove the VOID watermark (hides btnVoid field & clears appearances)</p>
+                        <button id="remove-void-btn" class="btn btn-secondary">Remove VOID</button>
+                    </div>
+                    <div class="utility-card">
+                        <h3>🧹 Clear All Defaults</h3>
+                        <p>Remove all default values from the PDF</p>
+                        <button id="clear-defaults-btn" class="btn btn-secondary">Clear Defaults</button>
+                    </div>
+                    <div class="utility-card">
+                        <h3>💾 Export Template</h3>
+                        <p>Download JSON template with all fields</p>
+                        <button id="export-template-btn" class="btn btn-secondary">Export JSON</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <section class="card success">
+                <h2>✅ Success!</h2>
+                <p id="result-message"></p>
+                <div class="button-group">
+                    <button id="download-btn" class="btn btn-success btn-large">⬇️ Download PDF</button>
+                    <button id="start-over-btn" class="btn btn-secondary">🔄 Start Over</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>PDF Form Filler | Built with Flask & pikepdf</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

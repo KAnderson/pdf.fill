@@ -1,0 +1,9 @@
+
+================================================================================
+FUNCTION: CS90_Custom
+================================================================================
+Traceback (most recent call last):
+  File "/Users/kevin/Projects/pdf.fill/extract_all_javascript.py", line 26, in <module>
+    js_code = js_value.read_bytes().decode('utf-8', errors='ignore')
+              ~~~~~~~~~~~~~~~~~~~^^
+pikepdf._core.PdfError: operation for stream attempted on object of type string

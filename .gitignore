@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Flask
+instance/
+.webassets-cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PDF files (except clean template)
+*.pdf
+!CLEAN_TEMPLATE.pdf
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# Session files
+flask_session/
+
+# Local test data
+test_*.json
+sample_*.pdf
