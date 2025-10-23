@@ -2,6 +2,7 @@
 let currentFileId = null;
 let currentFields = [];
 let fillFields = [];
+let currentTemplateData = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +52,7 @@ function setupEventListeners() {
 
     // Template
     document.getElementById('generate-template-btn').addEventListener('click', generateTemplate);
+    document.getElementById('save-template-json-btn').addEventListener('click', saveTemplateAsJSON);
 
     // Fill PDF
     document.getElementById('add-field-btn').addEventListener('click', addFillField);
@@ -211,8 +213,10 @@ async function performSearch() {
 async function generateTemplate() {
     const section = document.querySelector('input[name="template-section"]:checked').value;
     const output = document.getElementById('template-output');
+    const saveBtn = document.getElementById('save-template-json-btn');
 
     output.textContent = 'Generating template...';
+    saveBtn.disabled = true;
 
     try {
         const url = `/api/template/${currentFileId}${section ? '?section=' + section : ''}`;
@@ -220,6 +224,9 @@ async function generateTemplate() {
         const data = await response.json();
 
         if (data.success) {
+            // Store template data for saving
+            currentTemplateData = data.template;
+
             // Build JSON with descriptions as inline comments
             let jsonLines = ['{\n'];
             const fields = data.template;
@@ -234,11 +241,51 @@ async function generateTemplate() {
 
             jsonLines.push('}');
             output.textContent = jsonLines.join('');
+
+            // Enable save button
+            saveBtn.disabled = false;
         } else {
             output.textContent = `Error: ${data.error}`;
+            currentTemplateData = null;
         }
     } catch (error) {
         output.textContent = `Error: ${error.message}`;
+        currentTemplateData = null;
+    }
+}
+
+function saveTemplateAsJSON() {
+    if (!currentTemplateData) {
+        alert('Please generate a template first');
+        return;
+    }
+
+    try {
+        // Build JSON with descriptions as inline comments
+        let jsonLines = ['{\n'];
+        const fields = currentTemplateData;
+
+        fields.forEach((field, index) => {
+            const isLast = index === fields.length - 1;
+            const description = field.description ? ` // ${field.description}` : '';
+            const fieldValue = JSON.stringify(field.value);
+
+            jsonLines.push(`  "${field.name}": ${fieldValue}${isLast ? '' : ','}${description}\n`);
+        });
+
+        jsonLines.push('}');
+        const jsonString = jsonLines.join('');
+
+        // Create and download file
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'template.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    } catch (error) {
+        alert('Failed to save template: ' + error.message);
     }
 }
 
